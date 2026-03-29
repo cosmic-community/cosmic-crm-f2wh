@@ -58,13 +58,13 @@ export default async function DashboardPage() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Your CRM overview at a glance</p>
+      <div className="mb-6 lg:mb-8">
+        <h1 className="text-xl lg:text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
+        <p className="text-gray-500 mt-1 text-sm lg:text-base">Your CRM overview at a glance</p>
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-6 lg:mb-8">
         <StatCard
           title="Total Contacts"
           value={contacts.length}
@@ -115,16 +115,16 @@ export default async function DashboardPage() {
       </div>
 
       {/* Pipeline Overview & Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
         {/* Pipeline Mini */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Pipeline Overview</h2>
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-4 lg:mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900">Pipeline Overview</h2>
             <Link href="/deals" className="text-sm text-brand-600 hover:text-brand-700 font-medium">
               View all →
             </Link>
           </div>
-          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 lg:gap-3">
             {PIPELINE_STAGES.map((stage) => {
               const stageDeals = dealsByStage[stage];
               if (!stageDeals) return null;
@@ -138,7 +138,7 @@ export default async function DashboardPage() {
               return (
                 <div
                   key={stage}
-                  className={`rounded-xl p-4 text-center ${
+                  className={`rounded-xl p-3 lg:p-4 text-center ${
                     isWon
                       ? 'bg-emerald-50 border border-emerald-100'
                       : isLost
@@ -146,8 +146,8 @@ export default async function DashboardPage() {
                       : 'bg-gray-50 border border-gray-100'
                   }`}
                 >
-                  <p className="text-xs font-medium text-gray-500 mb-2 truncate">{stage}</p>
-                  <p className={`text-2xl font-bold ${isWon ? 'text-emerald-700' : isLost ? 'text-red-700' : 'text-gray-900'}`}>
+                  <p className="text-xs font-medium text-gray-500 mb-1 lg:mb-2 truncate">{stage}</p>
+                  <p className={`text-xl lg:text-2xl font-bold ${isWon ? 'text-emerald-700' : isLost ? 'text-red-700' : 'text-gray-900'}`}>
                     {stageDeals.length}
                   </p>
                   <p className="text-xs text-gray-400 mt-1">{formatCurrency(stageValue)}</p>
@@ -158,9 +158,9 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Activities */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-4 lg:mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900">Recent Activity</h2>
             <Link href="/activities" className="text-sm text-brand-600 hover:text-brand-700 font-medium">
               View all →
             </Link>
@@ -168,12 +168,12 @@ export default async function DashboardPage() {
           {recentActivities.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">No activities yet</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 lg:space-y-4">
               {recentActivities.map((activity) => (
                 <Link
                   key={activity.id}
                   href={`/activities/${activity.slug}`}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                  className="flex items-start gap-3 p-2 lg:p-3 rounded-lg hover:bg-gray-50 transition-colors group"
                 >
                   <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 text-brand-600 group-hover:bg-brand-100 transition-colors">
                     <ActivityIcon type={getMetafieldValue(activity.metadata?.activity_type)} />
@@ -191,7 +191,9 @@ export default async function DashboardPage() {
                       )}
                     </p>
                   </div>
-                  <StatusBadge status={activity.metadata?.activity_type} />
+                  <div className="hidden sm:block">
+                    <StatusBadge status={activity.metadata?.activity_type} />
+                  </div>
                 </Link>
               ))}
             </div>

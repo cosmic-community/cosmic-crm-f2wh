@@ -28,7 +28,7 @@ const stageBgColors: Record<string, string> = {
 
 export default function KanbanBoard({ dealsByStage, stages }: KanbanBoardProps) {
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4">
+    <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 lg:mx-0 lg:px-0 snap-x snap-mandatory lg:snap-none">
       {stages.map((stage) => {
         const stageDeals = dealsByStage[stage];
         if (!stageDeals) return null;
@@ -42,7 +42,7 @@ export default function KanbanBoard({ dealsByStage, stages }: KanbanBoardProps) 
         const bgColor = stageBgColors[stage] || 'bg-gray-50';
 
         return (
-          <div key={stage} className="flex-shrink-0 w-72">
+          <div key={stage} className="flex-shrink-0 w-[280px] sm:w-72 snap-start">
             <div className={`kanban-column border-t-4 ${borderColor}`}>
               {/* Column Header */}
               <div className="flex items-center justify-between mb-4">
@@ -83,7 +83,7 @@ export default function KanbanBoard({ dealsByStage, stages }: KanbanBoardProps) 
                         <div className="space-y-1.5">
                           {contactName && (
                             <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                               </svg>
                               <span className="truncate">{contactName}</span>
@@ -91,7 +91,7 @@ export default function KanbanBoard({ dealsByStage, stages }: KanbanBoardProps) 
                           )}
                           {companyName && (
                             <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5M3.75 3v18m4.5-18v18m4.5-18v18m4.5-18v18m4.5-18v18" />
                               </svg>
                               <span className="truncate">{companyName}</span>
@@ -99,7 +99,7 @@ export default function KanbanBoard({ dealsByStage, stages }: KanbanBoardProps) 
                           )}
                           {closeDate && (
                             <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                               </svg>
                               <span>
