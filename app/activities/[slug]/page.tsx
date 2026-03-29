@@ -1,12 +1,14 @@
-// app/activities/[slug]/page.tsx
-import { getActivityBySlug, getMetafieldValue } from '@/lib/cosmic';
+import { getActivityBySlug, getContacts, getDeals, getMetafieldValue } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import StatusBadge from '@/components/StatusBadge';
+import ActivityDetailClient from '@/components/ActivityDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ActivityDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const activity = await getActivityBySlug(slug);
+  const [activity, contacts, deals] = await Promise.all([getActivityBySlug(slug), getContacts(), getDeals()]);
 
   if (!activity) {
     notFound();
@@ -20,7 +22,6 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
 
   return (
     <div>
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/activities" className="hover:text-brand-600 transition-colors">Activities</Link>
         <span>/</span>
@@ -35,21 +36,14 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
                 <h1 className="text-xl font-bold text-gray-900">{activity.title}</h1>
                 {activityDate && (
                   <p className="text-sm text-gray-500 mt-1">
-                    {new Date(activityDate).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                    {' at '}
-                    {new Date(activityDate).toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                    })}
+                    {new Date(activityDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                   </p>
                 )}
               </div>
-              <StatusBadge status={activity.metadata?.activity_type} />
+              <div className="flex items-center gap-3">
+                <StatusBadge status={activity.metadata?.activity_type} />
+                <ActivityDetailClient activity={activity} contacts={contacts} deals={deals} />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -60,15 +54,7 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
               <div>
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Date</p>
                 <p className="text-sm text-gray-900">
-                  {activityDate
-                    ? new Date(activityDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                    : '—'}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Created</p>
-                <p className="text-sm text-gray-900">
-                  {new Date(activity.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  {activityDate ? new Date(activityDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—'}
                 </p>
               </div>
             </div>
@@ -82,28 +68,20 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           {contact && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">Related Contact</h3>
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Contact</h3>
               <Link href={`/contacts/${contact.slug}`} className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <p className="text-sm font-medium text-gray-900">{contact.title}</p>
-                {contact.metadata?.email && (
-                  <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(contact.metadata.email)}</p>
-                )}
               </Link>
             </div>
           )}
-
           {deal && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">Related Deal</h3>
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Deal</h3>
               <Link href={`/deals/${deal.slug}`} className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <p className="text-sm font-medium text-gray-900">{deal.title}</p>
-                {deal.metadata?.stage && (
-                  <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(deal.metadata.stage)}</p>
-                )}
               </Link>
             </div>
           )}

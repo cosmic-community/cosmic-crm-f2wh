@@ -1,12 +1,14 @@
-// app/deals/[slug]/page.tsx
-import { getDealBySlug, getMetafieldValue } from '@/lib/cosmic';
+import { getDealBySlug, getContacts, getCompanies, getMetafieldValue } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import StatusBadge from '@/components/StatusBadge';
+import DealDetailClient from '@/components/DealDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 export default async function DealDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const deal = await getDealBySlug(slug);
+  const [deal, contacts, companies] = await Promise.all([getDealBySlug(slug), getContacts(), getCompanies()]);
 
   if (!deal) {
     notFound();
@@ -21,7 +23,6 @@ export default async function DealDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <div>
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/deals" className="hover:text-brand-600 transition-colors">Deals</Link>
         <span>/</span>
@@ -38,7 +39,10 @@ export default async function DealDetailPage({ params }: { params: Promise<{ slu
                   ${isNaN(value) ? '0' : value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                 </p>
               </div>
-              <StatusBadge status={deal.metadata?.stage} type="deal" />
+              <div className="flex items-center gap-3">
+                <StatusBadge status={deal.metadata?.stage} type="deal" />
+                <DealDetailClient deal={deal} contacts={contacts} companies={companies} />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -49,9 +53,7 @@ export default async function DealDetailPage({ params }: { params: Promise<{ slu
               <div>
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Close Date</p>
                 <p className="text-sm text-gray-900">
-                  {closeDate
-                    ? new Date(closeDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                    : '—'}
+                  {closeDate ? new Date(closeDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—'}
                 </p>
               </div>
               <div>
@@ -77,28 +79,22 @@ export default async function DealDetailPage({ params }: { params: Promise<{ slu
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           {contact && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Contact</h3>
               <Link href={`/contacts/${contact.slug}`} className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <p className="text-sm font-medium text-gray-900">{contact.title}</p>
-                {contact.metadata?.email && (
-                  <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(contact.metadata.email)}</p>
-                )}
+                {contact.metadata?.email && <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(contact.metadata.email)}</p>}
               </Link>
             </div>
           )}
-
           {company && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Company</h3>
               <Link href={`/companies/${company.slug}`} className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <p className="text-sm font-medium text-gray-900">{company.title}</p>
-                {company.metadata?.industry && (
-                  <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(company.metadata.industry)}</p>
-                )}
+                {company.metadata?.industry && <p className="text-xs text-gray-500 mt-0.5">{getMetafieldValue(company.metadata.industry)}</p>}
               </Link>
             </div>
           )}
