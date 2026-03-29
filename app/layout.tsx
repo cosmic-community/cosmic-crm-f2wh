@@ -18,20 +18,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-        <script src="/dashboard-console-capture.js" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 pt-20 px-4 pb-8 lg:pt-8 lg:pl-72 lg:pr-8">
+        <Sidebar />
+        <main className="lg:ml-64 min-h-screen">
+          <div className="p-4 pt-16 sm:p-6 sm:pt-16 lg:p-8 lg:pt-8">
             {children}
-          </main>
-        </div>
+          </div>
+        </main>
         <CosmicBadge bucketSlug={bucketSlug} />
       </body>
     </html>

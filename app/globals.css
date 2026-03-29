@@ -9,10 +9,12 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -30,22 +32,29 @@
   }
 
   .stat-card {
-    @apply bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+    @apply bg-white rounded-xl border border-gray-100 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow;
   }
 
-  .kanban-column {
-    @apply bg-gray-50 rounded-xl p-4 min-h-[200px];
+  .page-header {
+    @apply text-2xl sm:text-3xl font-bold text-gray-900;
   }
 
-  .deal-card {
-    @apply bg-white rounded-lg border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer;
+  .section-card {
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden;
   }
+}
 
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
-
-  .table-row {
-    @apply border-b border-gray-50 hover:bg-gray-50/50 transition-colors duration-150;
+  
+  /* Hide scrollbar for Kanban horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
