@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply bg-brand-600 text-white shadow-md shadow-brand-600/25;
+  }
+
+  .sidebar-link-inactive {
+    @apply text-gray-400 hover:text-white hover:bg-white/10;
+  }
+
+  .stat-card {
+    @apply bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .kanban-column {
+    @apply bg-gray-50 rounded-xl p-4 min-h-[200px];
+  }
+
+  .deal-card {
+    @apply bg-white rounded-lg border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .table-row {
+    @apply border-b border-gray-50 hover:bg-gray-50/50 transition-colors duration-150;
+  }
+}
