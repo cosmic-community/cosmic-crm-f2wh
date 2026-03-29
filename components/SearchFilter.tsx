@@ -37,9 +37,9 @@ export default function SearchFilter<T>({
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
         {/* Search */}
-        <div className="relative flex-1 min-w-[240px]">
+        <div className="relative flex-1">
           <svg
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
             fill="none"
@@ -59,19 +59,21 @@ export default function SearchFilter<T>({
         </div>
 
         {/* Filters */}
-        {filterOptions.map((filterOpt) => (
-          <select
-            key={filterOpt.key}
-            value={filters[filterOpt.key] || 'All'}
-            onChange={(e) => setFilters((prev) => ({ ...prev, [filterOpt.key]: e.target.value }))}
-            className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all cursor-pointer"
-          >
-            <option value="All">{filterOpt.label}: All</option>
-            {filterOpt.options.map((opt) => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
-          </select>
-        ))}
+        <div className="flex gap-2 overflow-x-auto">
+          {filterOptions.map((filterOpt) => (
+            <select
+              key={filterOpt.key}
+              value={filters[filterOpt.key] || 'All'}
+              onChange={(e) => setFilters((prev) => ({ ...prev, [filterOpt.key]: e.target.value }))}
+              className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all cursor-pointer flex-shrink-0"
+            >
+              <option value="All">{filterOpt.label}: All</option>
+              {filterOpt.options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          ))}
+        </div>
       </div>
 
       {/* Filtered count */}
