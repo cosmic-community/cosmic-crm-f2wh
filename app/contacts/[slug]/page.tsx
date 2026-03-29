@@ -1,12 +1,14 @@
-// app/contacts/[slug]/page.tsx
-import { getContactBySlug, getMetafieldValue } from '@/lib/cosmic';
+import { getContactBySlug, getCompanies, getMetafieldValue } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import StatusBadge from '@/components/StatusBadge';
+import ContactDetailClient from '@/components/ContactDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ContactDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const contact = await getContactBySlug(slug);
+  const [contact, companies] = await Promise.all([getContactBySlug(slug), getCompanies()]);
 
   if (!contact) {
     notFound();
@@ -23,7 +25,6 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div>
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/contacts" className="hover:text-brand-600 transition-colors">Contacts</Link>
         <span>/</span>
@@ -31,14 +32,13 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Info */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-16 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center text-xl font-bold">
                 {initials}
               </div>
-              <div>
+              <div className="flex-1">
                 <h1 className="text-xl font-bold text-gray-900">
                   {firstName || lastName ? `${firstName} ${lastName}`.trim() : contact.title}
                 </h1>
@@ -48,8 +48,9 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
                   </Link>
                 )}
               </div>
-              <div className="ml-auto">
+              <div className="flex items-center gap-3">
                 <StatusBadge status={contact.metadata?.status} type="contact" />
+                <ContactDetailClient contact={contact} companies={companies} />
               </div>
             </div>
 
@@ -75,7 +76,6 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          {/* Notes */}
           {notes && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
               <h2 className="text-sm font-semibold text-gray-900 mb-3">Notes</h2>
@@ -84,7 +84,6 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           {company && (
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">

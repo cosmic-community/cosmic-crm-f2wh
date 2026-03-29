@@ -1,7 +1,9 @@
-// app/companies/[slug]/page.tsx
 import { getCompanyBySlug, getMetafieldValue } from '@/lib/cosmic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import CompanyDetailClient from '@/components/CompanyDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 export default async function CompanyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -19,7 +21,6 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div>
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/companies" className="hover:text-brand-600 transition-colors">Companies</Link>
         <span>/</span>
@@ -33,10 +34,11 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
               <div className="w-16 h-16 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center text-2xl font-bold">
                 {company.title.charAt(0).toUpperCase()}
               </div>
-              <div>
+              <div className="flex-1">
                 <h1 className="text-xl font-bold text-gray-900">{company.title}</h1>
                 {industry && <p className="text-sm text-gray-500">{industry}</p>}
               </div>
+              <CompanyDetailClient company={company} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -51,9 +53,7 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
               <div>
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Website</p>
                 {website ? (
-                  <a href={website.startsWith('http') ? website : `https://${website}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-600 hover:text-brand-700">
-                    {website}
-                  </a>
+                  <a href={website.startsWith('http') ? website : `https://${website}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-600 hover:text-brand-700">{website}</a>
                 ) : (
                   <p className="text-sm text-gray-900">—</p>
                 )}
@@ -79,15 +79,11 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500">Created</span>
-                <span className="text-gray-900 font-medium">
-                  {new Date(company.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                </span>
+                <span className="text-gray-900 font-medium">{new Date(company.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500">Last Modified</span>
-                <span className="text-gray-900 font-medium">
-                  {new Date(company.modified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                </span>
+                <span className="text-gray-900 font-medium">{new Date(company.modified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
               </div>
             </div>
           </div>
